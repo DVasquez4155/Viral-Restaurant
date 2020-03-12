@@ -10,39 +10,45 @@ var htmlPath = path.join(__dirname, 'public');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(htmlPath));
-app.get("/notes",function(req,res) {
-    res.sendfile(path.join(htmlPath, 'notes.html'))
+// app.use(express.static(htmlPath));
+app.get("/",function(req,res) {
+    res.sendfile(path.join(htmlPath, 'index.html'))
 })
-app.get("/api/notes", async function(req,res) {
-    res.json(await getDB());
+app.get("/reserve",function(req,res) {
+    res.sendfile(path.join(htmlPath, 'reserve.html'))
 })
-app.post("/api/notes", async function(req,res) {
-    const database = await getDB();
-    req.body.id = database[database.length - 1].id + 1;
-    database.push(req.body);
-    await writeDB(database)
-    res.send(req.body)
+app.get("/tables",function(req,res) {
+    res.sendfile(path.join(htmlPath, 'tables.html'))
 })
-app.delete("/api/notes/:id", async function(req,res) {
-    const database = await getDB();
-    database.forEach(element => {
-        if (element.id == parseInt(req.params.id)) {
+// app.get("/api/notes", async function(req,res) {
+//     res.json(await getDB());
+// })
+// app.post("/api/notes", async function(req,res) {
+//     const database = await getDB();
+//     req.body.id = database[database.length - 1].id + 1;
+//     database.push(req.body);
+//     await writeDB(database)
+//     res.send(req.body)
+// })
+// app.delete("/api/notes/:id", async function(req,res) {
+//     const database = await getDB();
+//     database.forEach(element => {
+//         if (element.id == parseInt(req.params.id)) {
             
-            var index = database.indexOf(element);
-            if (index > -1) {
-                database.splice(index, 1);
-            }
-        }
-    });
-    writeDB(database)
-    res.send(req.body);
-})
+//             var index = database.indexOf(element);
+//             if (index > -1) {
+//                 database.splice(index, 1);
+//             }
+//         }
+//     });
+//     writeDB(database)
+//     res.send(req.body);
+// })
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
-async function getDB() {
-    return JSON.parse(fs.readFileSync('./db/db.json'));
-}
-async function writeDB(data) {
-    fs.writeFileSync('./db/db.json', JSON.stringify(data));
-}
+// async function getDB() {
+//     return JSON.parse(fs.readFileSync('./db/db.json'));
+// }
+// async function writeDB(data) {
+//     fs.writeFileSync('./db/db.json', JSON.stringify(data));
+// }
