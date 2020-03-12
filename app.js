@@ -10,7 +10,7 @@ var htmlPath = path.join(__dirname, 'public');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use(express.static(htmlPath));
+app.use(express.static(htmlPath));
 app.get("/",function(req,res) {
     res.sendfile(path.join(htmlPath, 'index.html'))
 })
@@ -20,9 +20,12 @@ app.get("/reserve",function(req,res) {
 app.get("/tables",function(req,res) {
     res.sendfile(path.join(htmlPath, 'tables.html'))
 })
-// app.get("/api/notes", async function(req,res) {
-//     res.json(await getDB());
-// })
+app.get("/api/tables",async function(req,res) {
+    res.json(await getDB("./db/tables.json"));
+})
+app.get("/api/waitlist",async function(req,res) {
+    res.json(await getDB("./db/waitlist.json"));
+})
 // app.post("/api/notes", async function(req,res) {
 //     const database = await getDB();
 //     req.body.id = database[database.length - 1].id + 1;
@@ -34,7 +37,6 @@ app.get("/tables",function(req,res) {
 //     const database = await getDB();
 //     database.forEach(element => {
 //         if (element.id == parseInt(req.params.id)) {
-            
 //             var index = database.indexOf(element);
 //             if (index > -1) {
 //                 database.splice(index, 1);
@@ -46,9 +48,9 @@ app.get("/tables",function(req,res) {
 // })
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
-// async function getDB() {
-//     return JSON.parse(fs.readFileSync('./db/db.json'));
-// }
-// async function writeDB(data) {
-//     fs.writeFileSync('./db/db.json', JSON.stringify(data));
-// }
+async function getDB(file) {
+    return JSON.parse(fs.readFileSync(file));
+}
+async function writeDB(file,data) {
+    fs.writeFileSync(file, JSON.stringify(data));
+}
