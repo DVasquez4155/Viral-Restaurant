@@ -26,13 +26,25 @@ app.get("/api/tables",async function(req,res) {
 app.get("/api/waitlist",async function(req,res) {
     res.json(await getDB("./db/waitlist.json"));
 })
-// app.post("/api/notes", async function(req,res) {
-//     const database = await getDB();
-//     req.body.id = database[database.length - 1].id + 1;
-//     database.push(req.body);
-//     await writeDB(database)
-//     res.send(req.body)
-// })
+app.post("/api/tables", async function(req,res) {
+    const tables = await getDB("./db/tables.json");
+    const waitlist = await getDB("./db/waitlist.json");
+    const length = tables.length;
+    if (length < 5) {
+        tables.push(req.body);
+        await writeDB("./db/tables.json",tables)
+    }
+    else {
+        waitlist.push(req.body);
+        await writeDB("./db/waitlist.json",waitlist)
+    }
+    res.send(req.body)
+})
+app.post("/api/clear", async function(req,res) {
+    await writeDB("./db/tables.json",{})
+    await writeDB("./db/waitlist.json",{})
+    res.send(req.body)
+})
 // app.delete("/api/notes/:id", async function(req,res) {
 //     const database = await getDB();
 //     database.forEach(element => {
