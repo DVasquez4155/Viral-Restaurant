@@ -41,23 +41,10 @@ app.post("/api/tables", async function(req,res) {
     res.send(req.body)
 })
 app.post("/api/clear", async function(req,res) {
-    await writeDB("./db/tables.json",{})
-    await writeDB("./db/waitlist.json",{})
+    await writeDB("./db/tables.json",[])
+    await writeDB("./db/waitlist.json",[])
     res.send(req.body)
 })
-// app.delete("/api/notes/:id", async function(req,res) {
-//     const database = await getDB();
-//     database.forEach(element => {
-//         if (element.id == parseInt(req.params.id)) {
-//             var index = database.indexOf(element);
-//             if (index > -1) {
-//                 database.splice(index, 1);
-//             }
-//         }
-//     });
-//     writeDB(database)
-//     res.send(req.body);
-// })
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 async function getDB(file) {
